@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
+import ErrorPage from "./Components/ErrorPage";
+import Main from "./Components/Main";
+import { blue, orange } from "@material-ui/core/colors";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: blue[900],
+    },
+    secondary: {
+      main: orange[800],
+    },
+  },
+  typography: {
+    fontFamily: ["Roboto", "sans-serif"].join(","),
+  },
+});
+
+class App extends Component {
+  constructor() {
+    super();
+    this.state = { error: null };
+  }
+
+  componentDidCatch(error) {
+    this.setState({ error });
+  }
+
+  render() {
+    const { error } = this.state;
+
+    return (
+      <MuiThemeProvider theme={theme}>
+        {error ? <ErrorPage error={error} /> : <Main />}
+      </MuiThemeProvider>
+    );
+  }
 }
 
 export default App;
